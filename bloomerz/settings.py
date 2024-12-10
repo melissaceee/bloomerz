@@ -13,7 +13,12 @@ from __future__ import absolute_import, unicode_literals
 from pathlib import Path
 from dotenv import load_dotenv
 
+
 import os
+<<<<<<< HEAD
+=======
+
+>>>>>>> d3498ab1bad8ab312c22a61d7bc5bdc123d806ee
 import dj_database_url
 
 load_dotenv()
@@ -44,8 +49,11 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     # 'django_browser_reload',
+    
+    'django_crontab',
     'theme',
     'tailwind',
+    
     'main_app',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +61,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'celery',
+    'django_celery_beat',
+    
 ]
 
 MIDDLEWARE = [
@@ -143,9 +154,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'garden-index'
@@ -162,10 +173,11 @@ INTERNAL_IPS = [
 
 TAILWIND_APP_NAME = 'theme'
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CRONJOBS = [
+    ('0 * * * *', 'main_app.cron.update_date')
+]
+
+CELERY_BROKER_URL = os.getenv('REDIS_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-
